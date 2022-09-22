@@ -1,9 +1,9 @@
 pluginManagement {
     repositories {
+        maven { url 'https://repo.papermc.io/repository/maven-public/' }
         gradlePluginPortal()
-        maven 'https://repo.papermc.io/repository/maven-public/'
     }
 }
 
-rootProject.name = 'Jeonmang'
+rootProject.name = 'Byeol'
 
