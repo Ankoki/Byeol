@@ -4,7 +4,6 @@ plugins {
 }
 
 build.dependsOn(shadowJar)
-jar.enabled = false
 
 group 'com.ankoki'
 version '1.0'
@@ -23,5 +22,5 @@ dependencies {
 
 shadowJar {
     relocate 'org.bstats', 'com.ankoki.byeol.libs.bstats'
-    // archiveName 'Byeol-1.0.jar'
+    archiveName 'Byeol.jar'
 }
