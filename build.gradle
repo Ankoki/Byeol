@@ -7,7 +7,7 @@ build.dependsOn(shadowJar)
 jar.enabled = false
 
 group 'com.ankoki'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 compileJava.options.encoding = "UTF-8"
 
@@ -23,5 +23,5 @@ dependencies {
 
 shadowJar {
     relocate 'org.bstats', 'com.ankoki.byeol.libs.bstats'
-    archiveName 'Byeol.jar'
+    archiveName 'Byeol-1.0.jar'
 }
