@@ -23,5 +23,5 @@ dependencies {
 
 shadowJar {
     relocate 'org.bstats', 'com.ankoki.byeol.libs.bstats'
-    archiveName 'Byeol-1.0.jar'
+    // archiveName 'Byeol-1.0.jar'
 }
