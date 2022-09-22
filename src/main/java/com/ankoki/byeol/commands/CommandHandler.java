@@ -71,7 +71,7 @@ public class CommandHandler {
 					@Override
 					public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
 						final Class<?>[] types = method.getParameterTypes();
-						final Object[] parameters = new Object[method.getParameterCount()];
+						final Object[] parameters = new Object[types.length];
 						int i = 0;
 						if (types.length > 0 && types[0].isInstance(CommandSender.class)) {
 							parameters[i] = sender;
@@ -82,8 +82,19 @@ public class CommandHandler {
 							else parameters[i] = CommandHandler.get().getConverter(parameter).convert(args[i]);
 							i++;
 						}
+						if (types[types.length - 1] == String.class && args.length > types.length) {
+							final String[] fin = new String[(args.length - types.length) - 1];
+							int index = 0;
+							for (int in = types.length - 1; in < args.length; in++) {
+								fin[index] = args[in];
+								index++;
+							}
+							parameters[parameters.length - 1] = String.join("", fin);
+						}
 						try {
-							method.invoke(clazz.newInstance(), parameters);
+							Object obj = method.invoke(clazz.newInstance(), parameters);
+							if (obj instanceof Boolean bool) return bool;
+							return true;
 						} catch (ReflectiveOperationException ex) {
 							ex.printStackTrace();
 						} return true;
