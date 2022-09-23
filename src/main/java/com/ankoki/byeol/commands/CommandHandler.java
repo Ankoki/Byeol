@@ -9,7 +9,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CommandHandler {
 
@@ -64,6 +66,7 @@ public class CommandHandler {
 	public boolean registerCommand(Class<?> clazz) {
 		boolean allSucceeded = true;
 		for (Method method : clazz.getDeclaredMethods()) {
+			method.setAccessible(true);
 			if (method.isAnnotationPresent(CommandHook.class) &&
 					(method.getReturnType() == void.class || method.getReturnType() == boolean.class)) {
 				CommandHook hook = method.getAnnotation(CommandHook.class);
@@ -74,26 +77,37 @@ public class CommandHandler {
 						final Object[] parameters = new Object[types.length];
 						int i = 0;
 						boolean skipFirst = true;
-						if (types.length > 0 && types[0].isInstance(CommandSender.class)) {
-							parameters[i] = sender;
+						if (types.length > 0 && types[0].isAssignableFrom(CommandSender.class)) {
+							parameters[0] = sender;
 							i++;
-						}
+						} else skipFirst = false;
 						for (Class<?> parameter : types) {
 							if (skipFirst) {
 								skipFirst = false;
 								continue;
 							}
-							if (args.length < (i - 1) || !CommandHandler.get().hasConverter(parameter)) parameters[i] = null;
+							if (args.length < (i - 1)) parameters[i] = null;
+							else if (parameter.isAssignableFrom(String.class)) parameters[i] = args[i];
+							else if (!CommandHandler.get().hasConverter(parameter)) parameters[i] = null;
 							else parameters[i] = CommandHandler.get().getConverter(parameter).convert(args[i]);
 							i++;
 						}
-						if (types.length > 0 && types[types.length - 1] == String.class && args.length > types.length) {
-							final String[] fin = new String[(args.length - types.length) - 1];
+						if (types.length > 0 &&
+								types[types.length - 1] == String.class &&
+								args.length > (types[0].isAssignableFrom(CommandSender.class) ? types.length - 1 : types.length)) {
+							final int size = args.length;
+							final String[] fin = new String[size];
 							int index = 0;
-							for (int in = types.length - 1; in < args.length; in++) {
-								fin[index] = args[in];
+							for (String arg : args) {
+								if (index < (types.length - (types[0].isAssignableFrom(CommandSender.class) ? 2 : 1))) {
+									index++;
+									continue;
+								}
+								fin[index] = arg + " ";
 								index++;
 							}
+							String last = fin[fin.length - 1];
+							fin[fin.length - 1] = last.substring(0, last.length() - 1);
 							parameters[parameters.length - 1] = String.join("", fin);
 						}
 						try {

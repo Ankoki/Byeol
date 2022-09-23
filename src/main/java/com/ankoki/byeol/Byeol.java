@@ -24,7 +24,6 @@ public final class Byeol {
 	private final Logger logger = new Logger("BYEOL", null) {
 		@Override
 		public void log(LogRecord record) {
-			record.setMessage("BYEOL » " + record.getMessage());
 			super.log(record);
 		}
 	};
