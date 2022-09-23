@@ -2,7 +2,7 @@ package com.ankoki.byeol;
 
 import com.ankoki.byeol.commands.CommandHandler;
 import com.ankoki.byeol.commands.converters.*;
-import org.bstats.bukkit.Metrics;
+import com.ankoki.byeol.metrics.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
