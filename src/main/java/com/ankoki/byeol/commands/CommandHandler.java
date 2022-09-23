@@ -73,16 +73,21 @@ public class CommandHandler {
 						final Class<?>[] types = method.getParameterTypes();
 						final Object[] parameters = new Object[types.length];
 						int i = 0;
+						boolean skipFirst = true;
 						if (types.length > 0 && types[0].isInstance(CommandSender.class)) {
 							parameters[i] = sender;
 							i++;
 						}
 						for (Class<?> parameter : types) {
+							if (skipFirst) {
+								skipFirst = false;
+								continue;
+							}
 							if (args.length < (i - 1) || !CommandHandler.get().hasConverter(parameter)) parameters[i] = null;
 							else parameters[i] = CommandHandler.get().getConverter(parameter).convert(args[i]);
 							i++;
 						}
-						if (types[types.length - 1] == String.class && args.length > types.length) {
+						if (types.length > 0 && types[types.length - 1] == String.class && args.length > types.length) {
 							final String[] fin = new String[(args.length - types.length) - 1];
 							int index = 0;
 							for (int in = types.length - 1; in < args.length; in++) {
