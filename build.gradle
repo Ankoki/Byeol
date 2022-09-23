@@ -22,11 +22,6 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:3.0.0'
 }
 
-shadowJar {
-    relocate 'org.bstats', 'com.ankoki.byeol.libs.bstats'
-    archiveName 'Byeol.jar'
-}
-
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -38,6 +33,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 shadowJar {
+    relocate 'org.bstats', 'com.ankoki.byeol.libs.bstats'
     archiveName = "$baseName-$version.$extension"
 }
 
