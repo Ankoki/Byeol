@@ -76,5 +76,6 @@ public final class Byeol {
 				new OfflinePlayerConverter(),
 				new EntityTypeConverter()
 		);
+		this.getLogger().info(plugin.getName() + " has successfully hooked into Byeol.");
 	}
 }
