@@ -64,7 +64,7 @@ public final class Byeol {
 			final String authors = String.join(", ", authorsList);
 			logger.warning("The plugin '" + plugin.getName() + "' has not relocated the Byeol library from its default package.");
 			logger.warning("This can cause issues if other plugins on the server use it. Please contact the developer(s) " +
-					(authors.isEmpty() ? "" : "(" + authors + ") " + "and make them aware of this."));
+					(authors.isEmpty() ? "" : "(" + authors + ") ") + "and make them aware of this.");
 		}
 		CommandHandler.get().registerConverters(
 				new IntegerConverter(),
