@@ -4,14 +4,13 @@ import com.ankoki.byeol.Byeol;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CommandHandler {
 
@@ -76,11 +75,17 @@ public class CommandHandler {
 						final Class<?>[] types = method.getParameterTypes();
 						final Object[] parameters = new Object[types.length];
 						int i = 0;
+
+						// First parameter is Player/CommandSender logic.
 						boolean skipFirst = true;
 						if (types.length > 0 && types[0].isAssignableFrom(CommandSender.class)) {
 							parameters[0] = sender;
 							i++;
+						} else if (types.length > 0 && types[0].isAssignableFrom(Player.class) && sender instanceof Player player) {
+							parameters[0] = player;
+							i++;
 						} else skipFirst = false;
+						// Converters logic.
 						for (Class<?> parameter : types) {
 							if (skipFirst) {
 								skipFirst = false;
@@ -92,6 +97,7 @@ public class CommandHandler {
 							else parameters[i] = CommandHandler.get().getConverter(parameter).convert(args[i]);
 							i++;
 						}
+						// Final parameter is String logic.
 						if (types.length > 0 &&
 								types[types.length - 1] == String.class &&
 								args.length > (types[0].isAssignableFrom(CommandSender.class) ? types.length - 1 : types.length)) {
