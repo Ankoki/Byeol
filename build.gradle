@@ -16,3 +16,26 @@ repositories {
 dependencies {
     compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
 }
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            version = version
+            groupId = 'com.ankoki'
+            def releases = 'Byeol'
+            def snapshots = 'Byeol-BETA'
+            artifactId = version.endsWith('SNAPSHOT') || version.contains('ALPHA') ? snapshots : releases
+        }
+    }
+    repositories {
+        maven {
+            name = 'Byeol'
+            url = 'https://hat.lordoftherin.gs/releases'
+            credentials {
+                username = project.repoUser
+                password = project.repoPassword
+            }
+        }
+    }
+}
